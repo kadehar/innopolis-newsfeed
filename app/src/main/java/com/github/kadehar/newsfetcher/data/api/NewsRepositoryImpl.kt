@@ -1,7 +1,10 @@
 package com.github.kadehar.newsfetcher.data.api
 
+import com.github.kadehar.newsfetcher.data.toDomain
+import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
+
 class NewsRepositoryImpl(private val source: NewsRemoteSource) : NewsRepository {
-    override suspend fun fetchNews(topic: String): String {
-        return source.fetchNews(topic).articles.first().content //TODO: Change to mapper function
+    override suspend fun fetchNews(): List<NewsDomainModel> {
+        return source.fetchNews().articles.map { article -> article.toDomain() }
     }
 }

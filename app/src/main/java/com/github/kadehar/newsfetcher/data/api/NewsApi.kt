@@ -10,6 +10,8 @@ interface NewsApi {
     @GET(HttpRoutes.NEWS_PATH)
     @Headers("X-Api-Key: 59b3296766e7493e88a8a962a688e765")
     suspend fun fetchNews(
-        @Query("q") topic: String
+        @Query("q") topic: String = "",
+        @Query("language") language: String = "ru",
+        @Query("country") country: String = "ru"
     ) : NewsModel
 }
