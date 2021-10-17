@@ -2,11 +2,11 @@ package com.github.kadehar.newsfetcher.data.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SourceModel(
+data class NewsSourceModel(
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("name")
-    val name: String
+    val name: String?
 )
 
 /*

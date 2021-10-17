@@ -6,7 +6,7 @@ data class NewsModel(
     @SerializedName("totalResults")
     val totalResults: Long,
     @SerializedName("articles")
-    val articles: List<ArticleModel>
+    val articles: List<NewsArticleModel>
 )
 
 /*
