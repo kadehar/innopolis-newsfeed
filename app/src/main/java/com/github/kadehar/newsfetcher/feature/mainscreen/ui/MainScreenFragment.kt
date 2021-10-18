@@ -1,4 +1,4 @@
-package com.github.kadehar.newsfetcher.feature.mainscreen
+package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
