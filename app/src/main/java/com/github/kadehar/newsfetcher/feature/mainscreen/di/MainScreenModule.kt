@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val mainScreenModule = module {
     viewModel<MainScreenViewModel>{
-        MainScreenViewModel()
+        MainScreenViewModel(get<MainScreenNewsInteractor>())
     }
 
     single<NewsRemoteSource> {

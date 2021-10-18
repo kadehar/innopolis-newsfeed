@@ -18,4 +18,13 @@ class MainScreenFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_mainscreen, container, false)
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
+    }
+
+    private fun render(viewState: ViewState) {
+
+    }
 }
