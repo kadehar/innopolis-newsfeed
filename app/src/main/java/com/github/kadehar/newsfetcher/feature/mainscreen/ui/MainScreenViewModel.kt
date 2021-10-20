@@ -6,8 +6,17 @@ import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsIn
 
 class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) :
     BaseViewModel<ViewState>() {
+
+    init {
+        processUiEvent(UIEvent.GetCurrentNews)
+    }
+
     override fun initialViewState(): ViewState {
-        return ViewState(listOf(), false)
+        return ViewState(
+            articles = listOf(),
+            errorMessage = null,
+            isLoading = false
+        )
     }
 
     override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
@@ -23,13 +32,21 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                     }
                 )
             }
+            is UIEvent.OnArticleClick -> {
+
+            }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)
             }
             is DataEvent.SuccessNewsRequest -> {
-                return previousState.copy(articles = event.articles, isLoading = false)
+                return previousState.copy(
+                    articles = event.articles,
+                    errorMessage = null,
+                    isLoading = false
+                )
             }
             is DataEvent.ErrorNewsRequest -> {
+
             }
         }
         return null
