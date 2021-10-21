@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ class MainScreenFragment : Fragment() {
     private val mainScreenViewModel: MainScreenViewModel by viewModel<MainScreenViewModel>()
     private val newsAdapter: NewsAdapter by lazy { NewsAdapter(listOf()) }
     private lateinit var progressBar: ProgressBar
+    private lateinit var errors: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +32,7 @@ class MainScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val newsRecyclerView: RecyclerView = view.findViewById(R.id.rv_news)
         progressBar = view.findViewById(R.id.newsProgressBar)
+        errors = view.findViewById(R.id.errorTextView)
         newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         newsRecyclerView.adapter = newsAdapter
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
@@ -37,11 +40,17 @@ class MainScreenFragment : Fragment() {
 
     private fun render(viewState: ViewState) {
         updateProgressBar(viewState)
+        updateErrorText(viewState)
         updateList(viewState)
     }
 
     private fun updateProgressBar(viewState: ViewState) {
         progressBar.isVisible = viewState.isLoading
+    }
+
+    private fun updateErrorText(viewState: ViewState) {
+        errors.text = viewState.errorMessage
+        errors.isVisible = viewState.isInErrorState
     }
 
     private fun updateList(viewState: ViewState) {

@@ -15,7 +15,8 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
         return ViewState(
             articles = listOf(),
             errorMessage = null,
-            isLoading = false
+            isLoading = false,
+            isInErrorState = false
         )
     }
 
@@ -42,11 +43,16 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                 return previousState.copy(
                     articles = event.articles,
                     errorMessage = null,
-                    isLoading = false
+                    isLoading = false,
+                    isInErrorState = false
                 )
             }
             is DataEvent.ErrorNewsRequest -> {
-
+                return previousState.copy(
+                    isLoading = false,
+                    errorMessage = event.errorMessage,
+                    isInErrorState = true
+                )
             }
         }
         return null
