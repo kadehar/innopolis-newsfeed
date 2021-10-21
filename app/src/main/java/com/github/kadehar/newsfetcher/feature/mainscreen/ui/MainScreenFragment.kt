@@ -16,7 +16,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainScreenFragment : Fragment() {
     private val mainScreenViewModel: MainScreenViewModel by viewModel<MainScreenViewModel>()
-    private val newsAdapter: NewsAdapter by lazy { NewsAdapter(listOf()) }
+    private val newsAdapter: NewsAdapter by lazy {
+        NewsAdapter(listOf()) { article ->
+            mainScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
+        }
+    }
     private lateinit var progressBar: ProgressBar
     private lateinit var errors: TextView
 

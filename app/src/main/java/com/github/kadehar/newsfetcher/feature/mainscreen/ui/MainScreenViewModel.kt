@@ -15,8 +15,7 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
         return ViewState(
             articles = listOf(),
             errorMessage = null,
-            isLoading = false,
-            isInErrorState = false
+            isLoading = false
         )
     }
 
@@ -34,7 +33,8 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                 )
             }
             is UIEvent.OnArticleClick -> {
-
+                event.article
+                // TODO: Nav
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)
@@ -43,15 +43,13 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                 return previousState.copy(
                     articles = event.articles,
                     errorMessage = null,
-                    isLoading = false,
-                    isInErrorState = false
+                    isLoading = false
                 )
             }
             is DataEvent.ErrorNewsRequest -> {
                 return previousState.copy(
                     isLoading = false,
-                    errorMessage = event.errorMessage,
-                    isInErrorState = true
+                    errorMessage = event.errorMessage
                 )
             }
         }

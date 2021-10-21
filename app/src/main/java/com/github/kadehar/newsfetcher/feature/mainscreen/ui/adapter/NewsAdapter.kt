@@ -11,7 +11,10 @@ import com.github.kadehar.newsfetcher.R
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
 import java.text.SimpleDateFormat
 
-class NewsAdapter(private var news: List<NewsDomainModel>) :
+class NewsAdapter(
+    private var news: List<NewsDomainModel>,
+    private val onItemClick: (article: NewsDomainModel) -> Unit
+) :
     RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,6 +53,10 @@ class NewsAdapter(private var news: List<NewsDomainModel>) :
             val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
             publishedAt.text = formatter.format(parser.parse(article.publishedAt) ?: "")
+
+            itemView.setOnClickListener {
+                onItemClick(article)
+            }
         }
     }
 

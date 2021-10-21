@@ -6,13 +6,15 @@ import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomain
 data class ViewState(
     val articles: List<NewsDomainModel>,
     val errorMessage: String?,
-    val isLoading: Boolean,
-    val isInErrorState: Boolean
-)
+    val isLoading: Boolean
+) {
+    val isInErrorState: Boolean = errorMessage != null
+}
+
 
 sealed class UIEvent : Event {
     object GetCurrentNews : UIEvent()
-    object OnArticleClick : UIEvent()
+    data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
 }
 
 sealed class DataEvent : Event {
