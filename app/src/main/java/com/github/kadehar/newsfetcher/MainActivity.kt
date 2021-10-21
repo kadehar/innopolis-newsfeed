@@ -2,7 +2,7 @@ package com.github.kadehar.newsfetcher
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.github.kadehar.newsfetcher.feature.mainscreen.MainScreenFragment
+import com.github.kadehar.newsfetcher.feature.mainscreen.ui.MainScreenFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -10,8 +10,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
     single<OkHttpClient> {
+        val httpLogging = HttpLoggingInterceptor()
+        httpLogging.level = HttpLoggingInterceptor.Level.BODY
+
         OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor())
+            .addInterceptor(httpLogging)
             .build()
     }
 
