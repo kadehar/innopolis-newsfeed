@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +15,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainScreenFragment : Fragment() {
     private val mainScreenViewModel: MainScreenViewModel by viewModel<MainScreenViewModel>()
-    private lateinit var newsAdapter: NewsAdapter
+    private val newsAdapter: NewsAdapter by lazy { NewsAdapter(listOf()) }
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,13 +29,22 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val newsRecyclerView: RecyclerView = view.findViewById(R.id.rv_news)
-        newsAdapter = NewsAdapter()
+        progressBar = view.findViewById(R.id.newsProgressBar)
+        newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         newsRecyclerView.adapter = newsAdapter
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
     }
 
     private fun render(viewState: ViewState) {
-        newsAdapter.news = viewState.articles
-        newsAdapter.notifyDataSetChanged()
+        updateProgressBar(viewState)
+        updateList(viewState)
+    }
+
+    private fun updateProgressBar(viewState: ViewState) {
+        progressBar.isVisible = viewState.isLoading
+    }
+
+    private fun updateList(viewState: ViewState) {
+        newsAdapter.updateArticles(viewState.articles)
     }
 }
