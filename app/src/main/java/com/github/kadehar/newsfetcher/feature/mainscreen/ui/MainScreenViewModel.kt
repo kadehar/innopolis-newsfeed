@@ -2,9 +2,13 @@ package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
 import com.github.kadehar.newsfetcher.base.BaseViewModel
 import com.github.kadehar.newsfetcher.base.Event
+import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
 
-class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) :
+class MainScreenViewModel(
+    private val newsInteractor: MainScreenNewsInteractor,
+    private val bookmarksInteractor: BookmarksInteractor
+) :
     BaseViewModel<ViewState>() {
 
     init {
@@ -33,8 +37,7 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                 )
             }
             is UIEvent.OnArticleClick -> {
-                event.article
-                // TODO: Nav
+                bookmarksInteractor.create(event.article)
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)

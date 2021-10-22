@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.github.kadehar.newsfetcher.databinding.FragmentMainscreenBinding
 import com.github.kadehar.newsfetcher.feature.mainscreen.ui.adapter.NewsAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,9 +33,11 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val newsRecyclerView: RecyclerView = binding.rvNews
-        newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        newsRecyclerView.adapter = newsAdapter
+        binding.rvNews.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = newsAdapter
+        }
+
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
     }
 
@@ -56,9 +57,9 @@ class MainScreenFragment : Fragment() {
     }
 
     private fun updateErrorText(viewState: ViewState) {
-        binding.apply {
-            errorTextView.text = viewState.errorMessage
-            errorTextView.isVisible = viewState.isInErrorState
+        binding.errorTextView.apply {
+            text = viewState.errorMessage
+            isVisible = viewState.isInErrorState
         }
     }
 
