@@ -45,7 +45,7 @@ class MainScreenFragment : Fragment() {
         }
 
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
-        mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::openArticle)
+        mainScreenViewModel.singleEvent.observe(viewLifecycleOwner, ::openArticle)
     }
 
     override fun onDestroyView() {
@@ -74,9 +74,7 @@ class MainScreenFragment : Fragment() {
         newsAdapter.updateArticles(viewState.articles)
     }
 
-    private fun openArticle(viewState: ViewState) {
-        viewState.article?.let {
-            openUrl(requireActivity(), it.url)
-        }
+    private fun openArticle(event: OpenArticleEvent.OnArticleClick) {
+            openUrl(requireActivity(), event.article.url)
     }
 }

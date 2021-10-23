@@ -54,7 +54,8 @@ class BookmarksScreenFragment : Fragment() {
     }
 
     private fun render(viewState: BookmarksViewState) {
-        newsAdapter.updateArticles(viewState.articles)
+        val articles = viewState.articles.sortedByDescending { it.publishedAt }
+        newsAdapter.updateArticles(articles)
     }
 
     private fun singleEvent(event: OpenArticleEvent.OnArticleClick) {

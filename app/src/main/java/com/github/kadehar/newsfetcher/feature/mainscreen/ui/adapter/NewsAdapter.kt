@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.kadehar.newsfetcher.R
+import com.github.kadehar.newsfetcher.base.formatDate
 import com.github.kadehar.newsfetcher.base.setThrottledClickListener
 import com.github.kadehar.newsfetcher.databinding.ArticlesListItemBinding
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
-import java.text.SimpleDateFormat
 
 class NewsAdapter(
     private var news: List<NewsDomainModel>,
@@ -49,11 +49,7 @@ class NewsAdapter(
 
                 tvArticleTitle.text = article.title
                 tvArticleDescription.text = article.description ?: ""
-
-                val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
-                tvArticlePublishedAt.text =
-                    formatter.format(parser.parse(article.publishedAt) ?: "")
+                tvArticlePublishedAt.text = formatDate(article.publishedAt)
             }
 
             articlesBinding.root.setThrottledClickListener  {

@@ -4,6 +4,8 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.github.kadehar.newsfetcher.base.BaseViewModel
 import com.github.kadehar.newsfetcher.base.Event
+import com.github.kadehar.newsfetcher.base.mapToList
+import com.github.kadehar.newsfetcher.base.utils.SingleLiveEvent
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
@@ -15,6 +17,8 @@ class MainScreenViewModel(
     private val bookmarksInteractor: BookmarksInteractor
 ) :
     BaseViewModel<ViewState>() {
+
+    val singleEvent = SingleLiveEvent<OpenArticleEvent.OnArticleClick>()
 
     init {
         viewModelScope.launch {
@@ -54,11 +58,7 @@ class MainScreenViewModel(
                 val oldArticles = previousState.articles
                 val newArticles = event.articles
 
-                val articles = oldArticles.map { article ->
-                    article.copy(isBookmarked = newArticles.map { it.url }
-                        .contains(article.url))
-                }
-
+                val articles = mapToList(oldList = oldArticles, newList = newArticles)
                 return previousState.copy(articles = articles)
             }
             is DataEvent.OnDataLoad -> {
@@ -78,7 +78,7 @@ class MainScreenViewModel(
                 )
             }
             is OpenArticleEvent.OnArticleClick -> {
-                return previousState.copy(article = event.article)
+                singleEvent.value = event
             }
         }
         return null

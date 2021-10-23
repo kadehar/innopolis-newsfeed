@@ -45,7 +45,7 @@ class BookmarksScreenViewModel(private val interactor: BookmarksInteractor) :
                 return previousState.copy(articles = event.articles)
             }
             is OpenArticleEvent.OnArticleClick -> {
-                return previousState.copy(article = event.article)
+                singleEvent.value = event
             }
         }
         return null
