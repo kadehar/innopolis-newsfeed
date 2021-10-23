@@ -15,6 +15,7 @@ data class ViewState(
 
 sealed class UIEvent : Event {
     object GetCurrentNews : UIEvent()
+    data class OnBookmarksFetched(val articles: List<NewsDomainModel>) : UIEvent()
     data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
     data class OnBookmarkClick(val article: NewsDomainModel) : UIEvent()
 }
@@ -25,4 +26,5 @@ sealed class DataEvent : Event {
         val articles: List<NewsDomainModel>
     ) : DataEvent()
     data class ErrorNewsRequest(val errorMessage: String) : DataEvent()
+    data class AddArticleToBookmarks(val article: NewsDomainModel) : DataEvent()
 }

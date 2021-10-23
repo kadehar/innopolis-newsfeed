@@ -9,7 +9,8 @@ fun NewsDomainModel.toEntity(): BookmarkEntity = BookmarkEntity(
     author = author ?: "",
     title = title,
     description = description ?: "",
-    publishedAt = publishedAt
+    publishedAt = publishedAt,
+    isBookmarked = isBookmarked
 )
 
 fun BookmarkEntity.toDomain(): NewsDomainModel = NewsDomainModel(
@@ -18,5 +19,6 @@ fun BookmarkEntity.toDomain(): NewsDomainModel = NewsDomainModel(
     title = title,
     description = description,
     publishedAt = publishedAt,
-    urlToImage = imageUrl
+    urlToImage = imageUrl,
+    isBookmarked = isBookmarked
 )

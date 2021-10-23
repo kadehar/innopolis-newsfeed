@@ -9,8 +9,9 @@ data class BookmarksViewState(
 )
 
 sealed class UIEvent : Event {
-    object GetBookmarks : UIEvent()
+    data class OnBookmarksFetched(val articles: List<NewsDomainModel>) : UIEvent()
     data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
+    data class OnBookmarkClick(val article: NewsDomainModel) : UIEvent()
 }
 
 sealed class DataEvent : Event {

@@ -61,13 +61,14 @@ class NewsAdapter(
             }
 
             articlesBinding.bookmarkIcon.apply {
-               /* setOnCheckedChangeListener { checkBox, isChecked ->
-                    when (isChecked) {
-                        true -> checkBox.setButtonDrawable(R.drawable.ic_favourite_filled_24dp)
-                        else -> checkBox.setButtonDrawable(R.drawable.ic_favourite_outlined_24dp)
-                    }
-                }*/
+                if (article.isBookmarked) {
+                    setButtonDrawable(R.drawable.ic_favourite_filled_24dp)
+                } else {
+                    setButtonDrawable(R.drawable.ic_favourite_outlined_24dp)
+                }
+            }
 
+            articlesBinding.bookmarkIcon.apply {
                 setThrottledClickListener {
                     onBookmarkClick(article)
                 }

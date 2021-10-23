@@ -1,9 +1,12 @@
 package com.github.kadehar.newsfetcher.feature.bookmarksscreen.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.local.BookmarkDAO
+import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.local.BookmarkEntity
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
 
-class BookmarksRepoImpl(private val dao: BookmarkDAO) : BookmarksRepo {
+class BookmarksRepoImpl(private val dao: BookmarkDAO) : BookmarksRepository {
     override suspend fun create(article: NewsDomainModel) {
         dao.create(article.toEntity())
     }
@@ -18,5 +21,9 @@ class BookmarksRepoImpl(private val dao: BookmarkDAO) : BookmarksRepo {
 
     override suspend fun delete(article: NewsDomainModel) {
         dao.delete(article.toEntity())
+    }
+
+    override suspend fun subscribeByDesc(): LiveData<List<NewsDomainModel>> {
+        return dao.subscribeByDesc().map { it -> it.map { it.toDomain() } }
     }
 }

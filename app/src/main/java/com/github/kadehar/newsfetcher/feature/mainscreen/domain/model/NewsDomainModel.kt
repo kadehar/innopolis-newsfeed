@@ -6,5 +6,6 @@ data class NewsDomainModel(
     val description: String?,
     val url: String,
     val urlToImage: String?,
-    val publishedAt: String
+    val publishedAt: String,
+    val isBookmarked: Boolean = false
 )

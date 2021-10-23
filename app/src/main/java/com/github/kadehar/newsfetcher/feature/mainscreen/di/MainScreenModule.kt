@@ -4,6 +4,7 @@ import com.github.kadehar.newsfetcher.data.api.NewsApi
 import com.github.kadehar.newsfetcher.data.api.NewsRemoteSource
 import com.github.kadehar.newsfetcher.data.api.NewsRepository
 import com.github.kadehar.newsfetcher.data.api.NewsRepositoryImpl
+import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.BookmarksRepository
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.ui.MainScreenViewModel
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
@@ -24,6 +25,6 @@ val mainScreenModule = module {
     }
 
     single<MainScreenNewsInteractor> {
-        MainScreenNewsInteractor(get<NewsRepository>())
+        MainScreenNewsInteractor(get<NewsRepository>(), get<BookmarksRepository>())
     }
 }

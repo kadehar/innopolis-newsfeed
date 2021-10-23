@@ -1,10 +1,14 @@
 package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.github.kadehar.newsfetcher.base.BaseViewModel
 import com.github.kadehar.newsfetcher.base.Event
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
     private val newsInteractor: MainScreenNewsInteractor,
@@ -13,6 +17,11 @@ class MainScreenViewModel(
     BaseViewModel<ViewState>() {
 
     init {
+        viewModelScope.launch {
+            bookmarksInteractor.subscribeByDesc().asFlow().collect {
+                processUiEvent(UIEvent.OnBookmarksFetched(articles = it))
+            }
+        }
         processUiEvent(UIEvent.GetCurrentNews)
     }
 
@@ -39,10 +48,21 @@ class MainScreenViewModel(
                 )
             }
             is UIEvent.OnBookmarkClick -> {
-                bookmarksInteractor.create(event.article)
+                bookmarksInteractor.create(event.article.copy(isBookmarked = true))
             }
             is UIEvent.OnArticleClick -> {
                 return previousState.copy(article = event.article)
+            }
+            is UIEvent.OnBookmarksFetched -> {
+                val oldArticles = previousState.articles
+                val newArticles = event.articles
+
+                val articles = oldArticles.map { article ->
+                    article.copy(isBookmarked = newArticles.map { it.url }
+                        .contains(article.url))
+                }
+
+                return previousState.copy(articles = articles)
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)

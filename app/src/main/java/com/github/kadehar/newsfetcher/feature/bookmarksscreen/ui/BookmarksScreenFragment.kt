@@ -19,7 +19,7 @@ class BookmarksScreenFragment : Fragment() {
     private val newsAdapter: NewsAdapter by lazy {
         NewsAdapter(
             news = listOf(),
-            onBookmarkClick = {},
+            onBookmarkClick = bookmarksScreenViewModel::onBookmarkClick,
             onItemClick = { article ->
                 bookmarksScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
             }
@@ -53,7 +53,7 @@ class BookmarksScreenFragment : Fragment() {
 
     private fun render(viewState: BookmarksViewState) {
         newsAdapter.updateArticles(viewState.articles)
-        openArticle(viewState)
+//        openArticle(viewState)
     }
 
     override fun onDestroyView() {
