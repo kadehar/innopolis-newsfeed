@@ -23,7 +23,7 @@ class MainScreenFragment : Fragment() {
             news = listOf(),
             onBookmarkClick = mainScreenViewModel::onBookmarkClick,
             onItemClick = { article ->
-                mainScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
+                mainScreenViewModel.processUiEvent(OpenArticleEvent.OnArticleClick(article))
             }
         )
     }
@@ -45,6 +45,7 @@ class MainScreenFragment : Fragment() {
         }
 
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
+        mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::openArticle)
     }
 
     override fun onDestroyView() {
@@ -56,7 +57,6 @@ class MainScreenFragment : Fragment() {
         updateProgressBar(viewState)
         updateErrorText(viewState)
         updateList(viewState)
-        openArticle(viewState)
     }
 
     private fun updateProgressBar(viewState: ViewState) {

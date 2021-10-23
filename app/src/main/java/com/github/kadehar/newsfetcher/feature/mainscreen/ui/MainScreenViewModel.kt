@@ -50,9 +50,6 @@ class MainScreenViewModel(
             is UIEvent.OnBookmarkClick -> {
                 bookmarksInteractor.create(event.article.copy(isBookmarked = true))
             }
-            is UIEvent.OnArticleClick -> {
-                return previousState.copy(article = event.article)
-            }
             is UIEvent.OnBookmarksFetched -> {
                 val oldArticles = previousState.articles
                 val newArticles = event.articles
@@ -80,6 +77,9 @@ class MainScreenViewModel(
                     errorMessage = event.errorMessage
                 )
             }
+            is OpenArticleEvent.OnArticleClick -> {
+                return previousState.copy(article = event.article)
+            }
         }
         return null
     }
@@ -87,5 +87,4 @@ class MainScreenViewModel(
     fun onBookmarkClick(article: NewsDomainModel) {
         processUiEvent(UIEvent.OnBookmarkClick(article))
     }
-
 }

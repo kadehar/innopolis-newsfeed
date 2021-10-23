@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.kadehar.newsfetcher.base.openUrl
 import com.github.kadehar.newsfetcher.databinding.FragmentBookmarksScreenBinding
@@ -21,7 +22,7 @@ class BookmarksScreenFragment : Fragment() {
             news = listOf(),
             onBookmarkClick = bookmarksScreenViewModel::onBookmarkClick,
             onItemClick = { article ->
-                bookmarksScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
+                bookmarksScreenViewModel.processUiEvent(OpenArticleEvent.OnArticleClick(article))
             }
         )
     }
@@ -49,21 +50,19 @@ class BookmarksScreenFragment : Fragment() {
         }
 
         bookmarksScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
+        bookmarksScreenViewModel.singleEvent.observe(viewLifecycleOwner, ::singleEvent)
     }
 
     private fun render(viewState: BookmarksViewState) {
         newsAdapter.updateArticles(viewState.articles)
-//        openArticle(viewState)
+    }
+
+    private fun singleEvent(event: OpenArticleEvent.OnArticleClick) {
+        openUrl(requireContext(), event.article.url)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun openArticle(viewState: BookmarksViewState) {
-        viewState.article?.let {
-            openUrl(requireActivity(), it.url)
-        }
     }
 }
