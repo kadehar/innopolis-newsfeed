@@ -61,12 +61,12 @@ class NewsAdapter(
             }
 
             articlesBinding.bookmarkIcon.apply {
-                setOnCheckedChangeListener { checkBox, isChecked ->
+               /* setOnCheckedChangeListener { checkBox, isChecked ->
                     when (isChecked) {
                         true -> checkBox.setButtonDrawable(R.drawable.ic_favourite_filled_24dp)
                         else -> checkBox.setButtonDrawable(R.drawable.ic_favourite_outlined_24dp)
                     }
-                }
+                }*/
 
                 setThrottledClickListener {
                     onBookmarkClick(article)

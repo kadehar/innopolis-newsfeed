@@ -7,7 +7,8 @@ import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.local.Bookmar
 
 @Entity(tableName = TABLE_NAME)
 data class BookmarkEntity(
-    @PrimaryKey @ColumnInfo(name = "url") val url: String,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "image") val imageUrl: String,
     @ColumnInfo(name = "author") val author: String?,
     @ColumnInfo(name = "title") val title: String,

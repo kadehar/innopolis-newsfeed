@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.local.BookmarkDAO
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.data.local.BookmarkEntity
 
-@Database(entities = [BookmarkEntity::class], version = 2)
+@Database(entities = [BookmarkEntity::class], version = 3)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun bookmarksDAO(): BookmarkDAO
 }

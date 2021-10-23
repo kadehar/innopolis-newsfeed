@@ -7,7 +7,7 @@ interface BookmarkDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun create(entity: BookmarkEntity)
 
-    @Query("SELECT * FROM ${BookmarkEntity.TABLE_NAME}")
+    @Query("SELECT * FROM ${BookmarkEntity.TABLE_NAME} ORDER BY id DESC")
     suspend fun read(): List<BookmarkEntity>
 
     @Update
