@@ -15,6 +15,7 @@ data class ViewState(
 sealed class UIEvent : Event {
     object GetCurrentNews : UIEvent()
     data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
+    data class OnBookmarkClick(val article: NewsDomainModel) : UIEvent()
 }
 
 sealed class DataEvent : Event {

@@ -4,6 +4,7 @@ import com.github.kadehar.newsfetcher.base.BaseViewModel
 import com.github.kadehar.newsfetcher.base.Event
 import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
+import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
 
 class MainScreenViewModel(
     private val newsInteractor: MainScreenNewsInteractor,
@@ -36,7 +37,7 @@ class MainScreenViewModel(
                     }
                 )
             }
-            is UIEvent.OnArticleClick -> {
+            is UIEvent.OnBookmarkClick -> {
                 bookmarksInteractor.create(event.article)
             }
             is DataEvent.OnDataLoad -> {
@@ -57,6 +58,10 @@ class MainScreenViewModel(
             }
         }
         return null
+    }
+
+    fun onBookmarkClick(article: NewsDomainModel) {
+        processUiEvent(UIEvent.OnBookmarkClick(article))
     }
 
 }

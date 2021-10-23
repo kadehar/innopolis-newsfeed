@@ -17,9 +17,13 @@ class MainScreenFragment : Fragment() {
 
     private val mainScreenViewModel: MainScreenViewModel by viewModel<MainScreenViewModel>()
     private val newsAdapter: NewsAdapter by lazy {
-        NewsAdapter(listOf()) { article ->
-            mainScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
-        }
+        NewsAdapter(
+            news = listOf(),
+            onBookmarkClick = mainScreenViewModel::onBookmarkClick,
+            onItemClick = { article ->
+                mainScreenViewModel.processUiEvent(UIEvent.OnArticleClick(article))
+            }
+        )
     }
 
     override fun onCreateView(
@@ -33,7 +37,7 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvNews.apply {
+        binding.rvArticles.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = newsAdapter
         }

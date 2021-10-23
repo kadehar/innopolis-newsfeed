@@ -5,13 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.kadehar.newsfetcher.R
+import com.github.kadehar.newsfetcher.base.setThrottledClickListener
 import com.github.kadehar.newsfetcher.databinding.ArticlesListItemBinding
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
 import java.text.SimpleDateFormat
 
 class NewsAdapter(
     private var news: List<NewsDomainModel>,
-    private val onItemClick: (article: NewsDomainModel) -> Unit
+    private val onItemClick: (article: NewsDomainModel) -> Unit,
+    private val onBookmarkClick: (article: NewsDomainModel) -> Unit
 ) :
     RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
@@ -54,8 +56,21 @@ class NewsAdapter(
                     formatter.format(parser.parse(article.publishedAt) ?: "")
             }
 
-            itemView.setOnClickListener {
+            articlesBinding.root.setThrottledClickListener  {
                 onItemClick(article)
+            }
+
+            articlesBinding.bookmarkIcon.apply {
+                setOnCheckedChangeListener { checkBox, isChecked ->
+                    when (isChecked) {
+                        true -> checkBox.setButtonDrawable(R.drawable.ic_favourite_filled_24dp)
+                        else -> checkBox.setButtonDrawable(R.drawable.ic_favourite_outlined_24dp)
+                    }
+                }
+
+                setThrottledClickListener {
+                    onBookmarkClick(article)
+                }
             }
         }
     }
