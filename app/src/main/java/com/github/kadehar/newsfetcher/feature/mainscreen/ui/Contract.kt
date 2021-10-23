@@ -5,6 +5,7 @@ import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomain
 
 data class ViewState(
     val articles: List<NewsDomainModel>,
+    val article: NewsDomainModel?,
     val errorMessage: String?,
     val isLoading: Boolean
 ) {

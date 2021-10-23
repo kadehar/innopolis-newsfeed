@@ -13,7 +13,9 @@ class BookmarksScreenViewModel(private val interactor: BookmarksInteractor) :
     }
 
     override fun initialViewState(): BookmarksViewState {
-        return BookmarksViewState(listOf())
+        return BookmarksViewState(
+            articles = listOf(),
+            article = null)
     }
 
     override suspend fun reduce(event: Event, previousState: BookmarksViewState): BookmarksViewState? {
@@ -27,6 +29,9 @@ class BookmarksScreenViewModel(private val interactor: BookmarksInteractor) :
                         processDataEvent(DataEvent.RefreshDataBase(it))
                     }
                 )
+            }
+            is UIEvent.OnArticleClick -> {
+                return previousState.copy(article = event.article)
             }
             is DataEvent.RefreshDataBase -> {
                 return previousState.copy(articles = event.articles)

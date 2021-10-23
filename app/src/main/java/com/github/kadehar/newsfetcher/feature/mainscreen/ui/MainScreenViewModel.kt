@@ -19,6 +19,7 @@ class MainScreenViewModel(
     override fun initialViewState(): ViewState {
         return ViewState(
             articles = listOf(),
+            article = null,
             errorMessage = null,
             isLoading = false
         )
@@ -39,6 +40,9 @@ class MainScreenViewModel(
             }
             is UIEvent.OnBookmarkClick -> {
                 bookmarksInteractor.create(event.article)
+            }
+            is UIEvent.OnArticleClick -> {
+                return previousState.copy(article = event.article)
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)

@@ -1,15 +1,23 @@
 package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.kadehar.newsfetcher.databinding.FragmentMainscreenBinding
 import com.github.kadehar.newsfetcher.feature.mainscreen.ui.adapter.NewsAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import com.github.kadehar.newsfetcher.R
+import com.github.kadehar.newsfetcher.base.openUrl
+
 
 class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainscreenBinding? = null
@@ -54,6 +62,7 @@ class MainScreenFragment : Fragment() {
         updateProgressBar(viewState)
         updateErrorText(viewState)
         updateList(viewState)
+        openArticle(viewState)
     }
 
     private fun updateProgressBar(viewState: ViewState) {
@@ -69,5 +78,11 @@ class MainScreenFragment : Fragment() {
 
     private fun updateList(viewState: ViewState) {
         newsAdapter.updateArticles(viewState.articles)
+    }
+
+    private fun openArticle(viewState: ViewState) {
+        viewState.article?.let {
+            openUrl(requireActivity(), it.url)
+        }
     }
 }
