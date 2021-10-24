@@ -9,6 +9,7 @@ import com.github.kadehar.newsfetcher.base.formatDate
 import com.github.kadehar.newsfetcher.base.setThrottledClickListener
 import com.github.kadehar.newsfetcher.databinding.ArticlesListItemBinding
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
+import java.text.SimpleDateFormat
 
 class NewsAdapter(
     private var news: List<NewsDomainModel>,

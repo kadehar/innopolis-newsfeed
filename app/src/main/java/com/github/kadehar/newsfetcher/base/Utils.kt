@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
+import java.text.ParseException
 import java.text.SimpleDateFormat
 
 inline fun <reified T> attempt(func: () -> T): Either<Throwable, T> = try {
@@ -22,7 +23,11 @@ fun openUrl(context: Context, url: String) {
 fun formatDate(date: String): String {
     val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
-    return formatter.format(parser.parse(date) ?: "")
+    return try {
+        formatter.format(parser.parse(date) ?: "")
+    } catch (e: ParseException) {
+        date
+    }
 }
 
 fun mapToList(
