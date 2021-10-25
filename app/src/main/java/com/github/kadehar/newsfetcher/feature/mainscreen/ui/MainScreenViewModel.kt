@@ -17,7 +17,6 @@ class MainScreenViewModel(
     private val bookmarksInteractor: BookmarksInteractor
 ) :
     BaseViewModel<ViewState>() {
-
     val singleEvent = SingleLiveEvent<OpenArticleEvent.OnArticleClick>()
 
     init {
@@ -32,9 +31,12 @@ class MainScreenViewModel(
     override fun initialViewState(): ViewState {
         return ViewState(
             articles = listOf(),
+            searchResult = listOf(),
             article = null,
             errorMessage = null,
-            isLoading = false
+            isLoading = false,
+            isSearchVisible = false,
+            searchText = ""
         )
     }
 
@@ -60,6 +62,16 @@ class MainScreenViewModel(
 
                 val articles = mapToList(oldList = oldArticles, newList = newArticles)
                 return previousState.copy(articles = articles)
+            }
+            is UIEvent.OnSearchClicked -> {
+                return previousState.copy(isSearchVisible = !previousState.isSearchVisible)
+            }
+            is UIEvent.OnSearchTextInput -> {
+                val results = previousState.articles.filter { article ->
+                    article.title.contains(event.searchText)
+                }
+
+                return previousState.copy(searchResult = results)
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)

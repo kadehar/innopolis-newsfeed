@@ -1,10 +1,14 @@
 package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.kadehar.newsfetcher.base.openUrl
@@ -44,6 +48,24 @@ class MainScreenFragment : Fragment() {
             adapter = newsAdapter
         }
 
+        binding.search.setOnClickListener {
+            mainScreenViewModel.processUiEvent(UIEvent.OnSearchClicked)
+        }
+
+        binding.searchField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                mainScreenViewModel.processUiEvent(UIEvent.OnSearchTextInput(p0.toString()))
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+
         mainScreenViewModel.viewState.observe(viewLifecycleOwner, ::render)
         mainScreenViewModel.singleEvent.observe(viewLifecycleOwner, ::openArticle)
     }
@@ -56,11 +78,13 @@ class MainScreenFragment : Fragment() {
     private fun render(viewState: ViewState) {
         updateProgressBar(viewState)
         updateErrorText(viewState)
-        updateList(viewState)
+        showResults(viewState)
+        binding.searchFieldContainer.isGone = !viewState.isSearchVisible
+
     }
 
     private fun updateProgressBar(viewState: ViewState) {
-        binding.newsProgressBar.isVisible = viewState.isLoading
+        binding.newsProgressBar.isGone = !viewState.isLoading
     }
 
     private fun updateErrorText(viewState: ViewState) {
@@ -76,5 +100,13 @@ class MainScreenFragment : Fragment() {
 
     private fun openArticle(event: OpenArticleEvent.OnArticleClick) {
             openUrl(requireActivity(), event.article.url)
+    }
+
+    private fun showResults(viewState: ViewState) {
+        if (viewState.isSearchVisible) {
+            newsAdapter.updateArticles(viewState.searchResult)
+        } else {
+            newsAdapter.updateArticles(viewState.articles)
+        }
     }
 }
