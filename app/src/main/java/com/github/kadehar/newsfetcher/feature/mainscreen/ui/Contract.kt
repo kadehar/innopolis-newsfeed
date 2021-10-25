@@ -5,8 +5,12 @@ import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomain
 
 data class ViewState(
     val articles: List<NewsDomainModel>,
+    val searchResult: List<NewsDomainModel>,
+    val article: NewsDomainModel?,
     val errorMessage: String?,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val isSearchVisible: Boolean,
+    val searchText: String
 ) {
     val isInErrorState: Boolean = errorMessage != null
 }
@@ -14,7 +18,10 @@ data class ViewState(
 
 sealed class UIEvent : Event {
     object GetCurrentNews : UIEvent()
-    data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
+    object OnSearchClicked : UIEvent()
+    data class OnSearchTextInput(val searchText: String) : UIEvent()
+    data class OnBookmarksFetched(val articles: List<NewsDomainModel>) : UIEvent()
+    data class OnBookmarkClick(val article: NewsDomainModel) : UIEvent()
 }
 
 sealed class DataEvent : Event {
@@ -23,4 +30,8 @@ sealed class DataEvent : Event {
         val articles: List<NewsDomainModel>
     ) : DataEvent()
     data class ErrorNewsRequest(val errorMessage: String) : DataEvent()
+}
+
+sealed class OpenArticleEvent : Event {
+    data class OnArticleClick(val article: NewsDomainModel) : UIEvent()
 }

@@ -2,6 +2,8 @@ package com.github.kadehar.newsfetcher
 
 import android.app.Application
 import com.github.kadehar.newsfetcher.di.appModule
+import com.github.kadehar.newsfetcher.di.databaseModule
+import com.github.kadehar.newsfetcher.feature.bookmarksscreen.di.bookmarksModule
 import com.github.kadehar.newsfetcher.feature.mainscreen.di.mainScreenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +16,7 @@ class NewsFeedApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@NewsFeedApp)
-            modules(appModule, mainScreenModule)
+            modules(appModule, mainScreenModule, databaseModule, bookmarksModule)
         }
     }
 }

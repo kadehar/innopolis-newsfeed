@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Новости</string>
     <string name="articlePhoto">Фото статьи</string>
+    <string name="bookmarks">Закладки</string>
 </resources>

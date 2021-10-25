@@ -1,21 +1,42 @@
 package com.github.kadehar.newsfetcher.feature.mainscreen.ui
 
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.github.kadehar.newsfetcher.base.BaseViewModel
 import com.github.kadehar.newsfetcher.base.Event
+import com.github.kadehar.newsfetcher.base.mapToList
+import com.github.kadehar.newsfetcher.base.utils.SingleLiveEvent
+import com.github.kadehar.newsfetcher.feature.bookmarksscreen.domain.BookmarksInteractor
 import com.github.kadehar.newsfetcher.feature.mainscreen.domain.MainScreenNewsInteractor
+import com.github.kadehar.newsfetcher.feature.mainscreen.domain.model.NewsDomainModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) :
+class MainScreenViewModel(
+    private val newsInteractor: MainScreenNewsInteractor,
+    private val bookmarksInteractor: BookmarksInteractor
+) :
     BaseViewModel<ViewState>() {
+    val singleEvent = SingleLiveEvent<OpenArticleEvent.OnArticleClick>()
 
     init {
+        viewModelScope.launch {
+            bookmarksInteractor.subscribeByDesc().asFlow().collect {
+                processUiEvent(UIEvent.OnBookmarksFetched(articles = it))
+            }
+        }
         processUiEvent(UIEvent.GetCurrentNews)
     }
 
     override fun initialViewState(): ViewState {
         return ViewState(
             articles = listOf(),
+            searchResult = listOf(),
+            article = null,
             errorMessage = null,
-            isLoading = false
+            isLoading = false,
+            isSearchVisible = false,
+            searchText = ""
         )
     }
 
@@ -32,9 +53,25 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                     }
                 )
             }
-            is UIEvent.OnArticleClick -> {
-                event.article
-                // TODO: Nav
+            is UIEvent.OnBookmarkClick -> {
+                bookmarksInteractor.create(event.article.copy(isBookmarked = true))
+            }
+            is UIEvent.OnBookmarksFetched -> {
+                val oldArticles = previousState.articles
+                val newArticles = event.articles
+
+                val articles = mapToList(oldList = oldArticles, newList = newArticles)
+                return previousState.copy(articles = articles)
+            }
+            is UIEvent.OnSearchClicked -> {
+                return previousState.copy(isSearchVisible = !previousState.isSearchVisible)
+            }
+            is UIEvent.OnSearchTextInput -> {
+                val results = previousState.articles.filter { article ->
+                    article.title.contains(event.searchText)
+                }
+
+                return previousState.copy(searchResult = results)
             }
             is DataEvent.OnDataLoad -> {
                 return previousState.copy(isLoading = true)
@@ -52,8 +89,14 @@ class MainScreenViewModel(private val newsInteractor: MainScreenNewsInteractor) 
                     errorMessage = event.errorMessage
                 )
             }
+            is OpenArticleEvent.OnArticleClick -> {
+                singleEvent.value = event
+            }
         }
         return null
     }
 
+    fun onBookmarkClick(article: NewsDomainModel) {
+        processUiEvent(UIEvent.OnBookmarkClick(article))
+    }
 }

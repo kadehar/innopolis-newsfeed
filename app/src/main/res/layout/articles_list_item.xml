@@ -61,6 +61,16 @@
                     android:textAppearance="?attr/textAppearanceBody2"
                     android:textColor="?android:attr/textColorSecondary"
                     tools:text="Published at 21/01/2001" />
+
+
+                <CheckBox
+                    android:id="@+id/bookmarkIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/sl_favourite_24dp"
+                    app:buttonTint="@android:color/black"
+                    />
+
             </LinearLayout>
 
         </LinearLayout>
